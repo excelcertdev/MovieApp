@@ -1,0 +1,21 @@
+{
+    "movieExists": "Ya existe una película con este título",
+    "movienotfound": "Película no encontrada",
+    "success_create": "¡Creación exitosa!",
+    "success_update": "¡Actualización exitosa!",
+    "success_delete": "¡Eliminación exitosa!",
+    "record_found": "¡Registro encontrado!",
+    "record_not_found": "¡Registro no encontrado!",
+    "enter_email": "Por favor, ingrese un correo electrónico válido",
+    "password_msg": "La contraseña debe tener al menos 8 caracteres, contener al menos una letra mayúscula, una letra minúscula, un dígito y un carácter especial.",
+    "email_exists": "Correo electrónico ya registrado",
+    "enter_all_fields": "Por favor, complete todos los campos",
+    "user_id_not_found": "¡Id de usuario no encontrado!",
+    "user_not_found": "¡Usuario no encontrado!",
+    "user_found": "¡Usuario encontrado exitosamente!",
+    "invalid_credentials": "Credenciales inválidas!",
+    "login_success": "Inicio de sesión exitoso!",
+    "invalid_pwd": "Contraseña inválida!",
+    "invalid_unm": "Nombre de usuario inválido!",
+    "server_error": "Error interno del servidor!"
+}

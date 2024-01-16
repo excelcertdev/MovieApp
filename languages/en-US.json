@@ -1,0 +1,26 @@
+
+{
+    "movieExists":"Movie with this title already exists",
+    "movienotfound":"Movie Not Found",
+    "success_create":"Created Successful!",
+    "success_update":"Updated Successful!",
+    "success_delete":"Deleted Successful!",
+    "record_found":"Record Fetched!",
+    "record_not_found":"Record not found!",
+    "enter_email":"Please enter valid Email",
+    "password_msg":"Password to be at least 8 characters long, contain at least one uppercase, one lowercase letter,one digit, and one special character.",
+    "email_exists":"Email already taken",
+    "enter_all_fields":"Please enter all the fields",
+    "user_id_not_found": "User Id not found!",
+    "user_not_found": "User not found!",
+    "user_found": "User found Successful!",
+    "invalid_credentials":"Invalid Credentials!",
+    "login_success":"Login successful!",
+    "invalid_pwd":"Invalid password!",
+    "invalid_unm":"Invalid username!",
+    "server_error": "Internal Server Error!",
+	"image_uploaded":"Image Uploaded",
+	"addedMovie":"Movie Created Successfully",
+	"errorImage":"Error in uploading image"
+    
+}
