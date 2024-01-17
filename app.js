@@ -35,8 +35,10 @@ dotenv.config({
 });
 
 /* Import router */
-import indexRouter from "./Routes/index.js";
-app.use("/", indexRouter);
+import userRouter from "./Routes/userRoute.js";
+import movieRoute from "./Routes/movieRoute.js"
+app.use("/api/user", userRouter);
+app.use("/api/movie", movieRoute);
 
 app.listen(process.env.PORT || 5858, () => {
   console.log(`Running ${environment} server on port ${process.env.PORT}`);

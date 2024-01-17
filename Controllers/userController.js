@@ -1,7 +1,7 @@
 import UserModel from "../Models/userModel.js";
-import validator from 'validator';
 import Bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
+import { isValidEmail,isPasswordValid } from '../utils/validation.js'
 
 /* generate JWT Token */
 const generateToken = async (payload, expires) => {
@@ -9,20 +9,6 @@ const generateToken = async (payload, expires) => {
   return token;
 };
 
-/* check if email is valid using validator */
-function isValidEmail(email) {
-  let validEmail = validator.isEmail(email);
-  if (!validEmail) {
-    return false;
-  }
-  return true;
-}
-
-/* check if password is valid using validator */
-function isPasswordValid(password) {
-  const passwordValidationRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  return passwordValidationRegex.test(password);
-}
 
 /* create user */
 const createUser = async (req, res) => {
@@ -75,7 +61,7 @@ const login = async (req, res) => {
     }
     else {
       const tokendata = { email: existingUser.email };
-      token = await generateToken(tokendata, '5h');
+      token = await generateToken(tokendata);
     }
 
     const LoggedUser = {
@@ -88,9 +74,25 @@ const login = async (req, res) => {
     console.log(err);
     return res.status(500).json({ status: false, message: res.__('server_error'), error: err });
   }
-};
+}
 
+const logout = (req,res)=>{
+    if (req.session && req.session.user) {
+      // Clear the session
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('Error destroying session:', err);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+          return res.status(200).json({ message: 'Logout successful' });
+        }
+      });
+    } else {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  }
 export {
   createUser,
-  login
+  login,
+  logout
 };
