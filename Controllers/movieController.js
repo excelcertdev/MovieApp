@@ -34,76 +34,50 @@ const addMovie = async (req, res) => {
 
 // Get and search movies created by a particular user
 const getMovies = async (req, res) => {
-  const { query, offset, limit } = req.body;
+  const { filter, offset, limit } = req.body;
+  const filterArray = [];
 
-  if (!query) {
-    try {
-      const aggregationPipeline = [
-        { $match: { userId: req.user.id } },
-        { $sort: { createdAt: -1 } },
-        { $skip: (Number(offset) - 1) * Number(limit) },
-      ];
+  if (filter.title) {
+    filterArray.push({ 'title': { $regex: filter.title, $options: 'i' } });
+  }
 
-      if (limit && !isNaN(Number(limit))) {
-        aggregationPipeline.push({ $limit: Number(limit) });
-      } else {
-        return res.status(200).json({ status: false, message: res.__('provide_limit') });
-      }
+  if (filter.publishingYear) {
+    filterArray.push({ 'publishingYear': { $eq: Number(filter.publishingYear) } });
+  }
 
-      const movies = await movieModel.aggregate(aggregationPipeline);
-      const totalMovies = await movieModel.find({ userId: req.user.id }).countDocuments();
-      const pages = Math.ceil(totalMovies / limit);
+  let query = {};
+  if (filterArray.length > 0) {
+    query = { $and: filterArray };
+  }
 
-      if (movies.length <= 0) {
-        return res.status(200).json({ status: false, message: res.__('record_not_found'), movies: movies });
-      }
+  try {
+    const aggregationPipeline = [
+      { $match: query },
+      { $sort: { createdAt: -1 } },
+      { $skip: (Number(offset) - 1) * Number(limit) },
+    ];
 
-      return res.status(200).json({ status: true, message: res.__('record_found'), movies: movies, pages });
-    } catch (error) {
-      return res.status(500).json({ status: false, message: res.__('server_error'), error: error });
+    if (limit && !isNaN(Number(limit))) {
+      aggregationPipeline.push({ $limit: Number(limit) });
+    } else {
+      return res.status(200).json({ status: false, message: res.__('provide_limit') });
     }
-  } else {
-    try {
-      const aggregationPipeline = [
-        {
-          $match: {
-            $and: [
-              { 'title': { $regex: query, $options: 'i' } },
-              { 'userId': req.user.id },
-            ],
-          },
-        },
-        { $sort: { createdAt: -1 } },
-        { $skip: (Number(offset) - 1) * Number(limit) },
-      ];
 
-      if (limit && !isNaN(Number(limit))) {
-        aggregationPipeline.push({ $limit: Number(limit) });
-      } else {
-        return res.status(200).json({ status: false, message: res.__('provide_limit') });
-      }
+    const movies = await movieModel.aggregate(aggregationPipeline);
+    const totalMovies = await movieModel.countDocuments(query);
+    const pages = Math.ceil(totalMovies / limit);
 
-      const movies = await movieModel.aggregate(aggregationPipeline);
-      const totalMovies = await movieModel.find({
-        $and: [
-          { 'title': { $regex: query, $options: 'i' } },
-          { 'userId': req.user.id },
-        ],
-      }).countDocuments();
-
-      const pages = Math.ceil(totalMovies / limit);
-
-      if (movies.length <= 0) {
-        return res.status(200).json({ status: false, message: res.__('record_not_found'), movies: movies });
-      }
-
-      return res.status(200).json({ status: true, message: res.__('record_found'), movies: movies, pages });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ status: false, message: res.__('server_error') });
+    if (movies.length <= 0) {
+      return res.status(200).json({ status: false, message: res.__('record_not_found'), movies: movies });
     }
+
+    return res.status(200).json({ status: true, message: res.__('record_found'), movies: movies, pages });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ status: false, message: res.__('server_error') });
   }
 };
+
 
 // Update movie
 const updateMovie = async (req, res) => {
@@ -115,7 +89,6 @@ const updateMovie = async (req, res) => {
 
   try {
     let movie = await movieModel.findOne({ "_id": movieId });
-
     if (!movie) {
       return res.status(200).json({
         status: false,
@@ -125,7 +98,7 @@ const updateMovie = async (req, res) => {
 
     const updatedMovie = await movieModel.findOneAndUpdate(
       { "_id": movieId },
-      { $set: { title: title, publishingYear: Number(publishingYear), poster: req.file.location } },
+      { $set: { title: title, publishingYear: Number(publishingYear), poster: req.file.location?req.file.location:movie.poster } },
       { new: true }
     );
 
@@ -157,7 +130,7 @@ const deleteMovie = async (req, res) => {
 
 // Get movie by id
 const getMovieById = async (req, res) => {
-  const  movieId = req.params.movieId;
+  const movieId = req.query.movieId;
   try {
     const movieData = await movieModel.findOne({ "_id": movieId });
     if (!movieData) {
