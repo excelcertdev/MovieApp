@@ -157,8 +157,7 @@ const deleteMovie = async (req, res) => {
 
 // Get movie by id
 const getMovieById = async (req, res) => {
-  const { movieId } = req.body;
-  
+  const  movieId = req.params.movieId;
   try {
     const movieData = await movieModel.findOne({ "_id": movieId });
     if (!movieData) {

@@ -12,6 +12,6 @@ router.post('/addMovie', uploadS3MovieImages.single('file'), passport.authentica
 router.post('/getMovies', passport.authenticate('jwt', { session: false }), movieController.getMovies);
 router.put('/updateMovies', uploadS3MovieImages.single('file'), passport.authenticate('jwt', { session: false }), movieController.updateMovie);
 router.delete('/deleteMovie', passport.authenticate('jwt', { session: false }), movieController.deleteMovie);
-router.get('/getMovieById', passport.authenticate('jwt', { session: false }), movieController.getMovieById);
+router.get('/getMovieById/:movieId', passport.authenticate('jwt', { session: false }), movieController.getMovieById);
 
 export default router;
