@@ -21,6 +21,8 @@
     "server_error": "Internal Server Error!",
 	"image_uploaded":"Image Uploaded",
 	"addedMovie":"Movie Created Successfully",
-	"errorImage":"Error in uploading image"
+	"errorImage":"Error in uploading image",
+    "logout":"logged out Successfully",
+    "Unauthorized":"Unauthorized"
     
 }

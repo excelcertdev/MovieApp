@@ -77,21 +77,11 @@ const login = async (req, res) => {
 }
 
 const logout = (req, res) => {
-  if (req.session && req.session.user) {
-    // Clear the session
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('Error destroying session:', err);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        // Clear user information in req
-        req.user = null;
-
-        return res.status(200).json({ message: 'Logout successful' });
-      }
-    });
+  if (req.user) {
+    req.user = null;
+    return res.status(200).json({ status:true,message: res.__('logout') });
   } else {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ status:false,message: res.__('Unauthorized')});
   }
 };
 
