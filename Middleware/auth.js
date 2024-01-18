@@ -1,7 +1,9 @@
-import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import passport from 'passport';
-import UserModel from "../Models/userModel.js";
-import dotenv from 'dotenv';
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const passport = require('passport');
+const UserModel = require('../Models/userModel.js');
+const dotenv = require('dotenv');
+const log = require('../utils/logger.js');
 const environment = process.env.NODE_ENV || 'dev';
 dotenv.config({
   path: `.env.${environment}`,
@@ -21,14 +23,14 @@ passport.use(
         if (user) {
           const senddata = {
             id: user._id,
-            email: user.email
+            email: user.email,
           };
           next(null, senddata);
         } else {
           next(null, false);
         }
       } catch (err) {
-        console.error(err);
+        log.error(`Failed in authenticating user \n error ${err} `);
         next(err, false);
       }
     }

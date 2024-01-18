@@ -1,15 +1,23 @@
-import express from "express";
+const express = require('express');
 const router = express.Router();
-import passport from "passport";
-import "../Middleware/auth.js";
-
+const passport = require('passport');
+require('../Middleware/auth.js');
 
 // Importing Controllers
-import * as userController from "../Controllers/userController.js";
+const userController = require('../Controllers/userController.js');
 
 // User Routes
-router.post('/createUser', passport.authenticate('jwt', { session: false }), userController.createUser);
+router.post(
+  '/createUser',
+  passport.authenticate('jwt', { session: false }),
+  userController.createUser
+);
 router.post('/login', userController.login);
-router.get('/logout',passport.authenticate('jwt', { session: false }), userController.logout);
 
-export default router;
+router.get(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  userController.logout
+);
+
+module.exports = router;

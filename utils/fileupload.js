@@ -1,9 +1,10 @@
-import express from 'express';
-import { S3Client } from '@aws-sdk/client-s3';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
+const express = require('express');
+const { S3Client } = require('@aws-sdk/client-s3');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+
 const environment = process.env.NODE_ENV || 'dev';
 dotenv.config({
   path: `.env.${environment}`,
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 
 const s3Client = new S3Client({
   region: 'ap-south-1',
-  credentials: { 
+  credentials: {
     accessKeyId: process.env.accessKeyId,
     secretAccessKey: process.env.secretAccessKey,
   },
@@ -26,11 +27,10 @@ const uploadS3MovieImages = multer({
     acl: 'public-read',
     bucket: 'movies-webapp',
     key: (req, file, cb) => {
-      console.log(file);
       cb(null, `images/${file.originalname}`);
     },
     contentType: multerS3.AUTO_CONTENT_TYPE,
   }),
 });
 
-export { uploadS3MovieImages };
+module.exports = { uploadS3MovieImages };
