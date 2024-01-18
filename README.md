@@ -6,7 +6,7 @@ BaseUrl : http://localhost:3000/api
 
 1. Create User API
 
-**endpoint** = /user/createUser \n
+endpoint = /user/createUser
 **allowed method** = POST
 **Authentication** = Bearer token
 
