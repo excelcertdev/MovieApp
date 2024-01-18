@@ -1,8 +1,8 @@
 # MoviesApp
 
-#BaseUrl : http://localhost:3000/api
+BaseUrl : http://localhost:3000/api
 
-# ==========User API's =============
+==========User API's =============
 
 1. Create User API
 
