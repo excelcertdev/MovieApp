@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const cors = require('cors');
 const { I18n } = require('i18n');
 const path = require('path');
 
@@ -12,9 +11,6 @@ const app = express();
 // Body parser middleware to handle JSON and URL-encoded data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-// Enable CORS for all routes
-app.use(cors());
 
 // I18n setup for internationalization
 const i18n = new I18n({

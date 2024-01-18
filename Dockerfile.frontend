@@ -1,0 +1,31 @@
+# Stage 1: Build the Node.js application
+FROM node:18 AS node-builder
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+# Build your Node.js application (if needed)
+# RUN npm run build
+
+# Stage 2: Create the final image with Nginx
+FROM nginx:latest
+
+# Create the destination directory for React build artifacts
+RUN mkdir -p /usr/share/nginx/html
+
+# Copy the React build artifacts into the Nginx HTML directory
+COPY --from=node-builder /usr/src/app/build /usr/share/nginx/html
+
+# Copy your Nginx custom configuration
+COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
+
+# Expose the necessary ports
+EXPOSE 80
+
+# Start Nginx and pm2
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+

@@ -1,5 +1,13 @@
 const { createLogger, format } = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
+const fs = require('fs');
+const path = require('path');
+
+// Check if 'Storage/logs' directory exists
+const logsDirectory = path.join(__dirname, 'Storage/logs');
+if (!fs.existsSync(logsDirectory)) {
+  fs.mkdirSync(logsDirectory, { recursive: true });
+}
 
 const logger = createLogger({
   level: 'info',
@@ -15,9 +23,9 @@ const logger = createLogger({
     })
   ),
   transports: [
-    //new transports.Console(),
+    // new transports.Console(),
     new DailyRotateFile({
-      filename: 'Storage/logs/movieApp-%DATE%.log',
+      filename: path.join(logsDirectory, 'movieApp-%DATE%.log'),
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
       maxSize: '20m',
